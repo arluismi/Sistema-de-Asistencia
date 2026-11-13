@@ -52,6 +52,15 @@ py -m venv .venv
 .\.venv\Scripts\python.exe run.py
 ```
 
+Los pasos 1 y 2 se pueden automatizar con el script de configuración del entorno, que crea
+`.venv` sólo si no existe e instala `requirements.txt` cuando cambió:
+
+```powershell
+.\configurar-entorno.ps1                      # crea el entorno e instala dependencias
+.\configurar-entorno.ps1 -ForzarInstalacion   # reinstala aunque no haya cambios
+.\configurar-entorno.bat                      # atajo equivalente para Windows
+```
+
 También se pueden ejecutar los comandos con la CLI de Flask:
 
 ```powershell
