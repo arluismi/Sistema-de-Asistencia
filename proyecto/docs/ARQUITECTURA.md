@@ -200,7 +200,7 @@ exponer trazas al cliente.
 
 Comando: `python -m pytest`.
 
-## 12. Trazabilidad con `liniamientos.md`
+## 12. Trazabilidad con `docs/liniamientos.md`
 
 | Exigencia | Implementación |
 |---|---|

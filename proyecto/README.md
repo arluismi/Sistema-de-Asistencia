@@ -2,7 +2,7 @@
 
 Sistema completo del trabajo práctico final: **backend** en **Python 3.11+** con **Flask** y
 **frontend** web estático en HTML, CSS y JavaScript sin dependencias externas. Implementa los
-dos módulos exigidos por `liniamientos.md`:
+dos módulos exigidos por [`docs/liniamientos.md`](docs/liniamientos.md):
 
 1. Control de asistencia de estudiantes.
 2. Asistencia y puntualidad del personal docente.
@@ -15,6 +15,7 @@ El contrato de API es la fuente de verdad y está documentado en
 
 | Documento | Contenido |
 |---|---|
+| [`docs/liniamientos.md`](docs/liniamientos.md) | Especificación de arquitectura y alcance |
 | [`docs/CONTRATO_API.md`](docs/CONTRATO_API.md) | Endpoints, roles, cuerpos y respuestas |
 | [`docs/GUIA_INTERFAZ.md`](docs/GUIA_INTERFAZ.md) | Pantallas, flujos y criterios de la interfaz |
 | [`frontend/README.md`](frontend/README.md) | Ejecución, estructura y alcance del frontend |
@@ -178,7 +179,7 @@ proyecto/
 │   ├── utilidades/       # Tiempo, validadores y respuestas
 │   ├── errores/          # Excepciones y manejadores globales
 │   └── comandos/         # Comandos de inicialización y datos demo
-├── docs/                 # Contrato de API, arquitectura y modelo de datos
+├── docs/                 # Lineamientos, contrato de API, arquitectura y modelo de datos
 ├── ia/                   # Órdenes persistentes para la IA
 ├── pruebas/              # Suite pytest
 ├── configuracion.py

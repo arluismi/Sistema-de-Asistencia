@@ -4,7 +4,7 @@ Este archivo es el punto de entrada para cualquier agente que trabaje dentro de
 `proyecto/`. Antes de modificar código, leer:
 
 1. `proyecto/ia/ORDENES_PERSISTENTES.md` — registro obligatorio de órdenes permanentes.
-2. `proyecto/liniamientos.md` — especificación de arquitectura y alcance.
+2. `proyecto/docs/liniamientos.md` — especificación de arquitectura y alcance.
 3. `docs/CONTRATO_API.md` — contrato de los endpoints implementados.
 4. `docs/ARQUITECTURA.md` — capas, patrones y decisiones de diseño.
 

@@ -38,12 +38,12 @@ agregarse al final con un identificador incremental, su fecha y su alcance.
   documentados en `proyecto/README.md` y `proyecto/requirements.txt`.
 - **Motivo:** Definir una base tecnológica estable para todas las etapas del trabajo.
 
-## OP-003 — Cumplimiento obligatorio de `proyecto/liniamientos.md`
+## OP-003 — Cumplimiento obligatorio de `proyecto/docs/liniamientos.md`
 
 - **Fecha de alta:** 2026-11-12
 - **Estado:** Vigente (reemplazada parcialmente por OP-006: se habilita el frontend)
 - **Origen:** Instrucción directa del usuario: iniciar el proyecto con los lineamientos
-  especificados en `proyecto/liniamientos.md`.
+  especificados en `proyecto/docs/liniamientos.md`.
 - **Contenido:** Todo desarrollo debe respetar la especificación de arquitectura backend
   vigente: alcance limitado a backend (sin UI), contrato de API documentado por endpoint,
   POO, arquitectura en capas (Modelos, Repositorios/DAO, Servicios, Controladores), roles
