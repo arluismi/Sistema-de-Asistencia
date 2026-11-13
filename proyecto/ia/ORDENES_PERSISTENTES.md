@@ -66,6 +66,21 @@ agregarse al final con un identificador incremental, su fecha y su alcance.
 - **Motivo:** Preparar la futura incorporación del frontend sin perder la restricción de
   alcance backend y sin que la interfaz invente endpoints, campos o cálculos.
 
+## OP-005 — Un commit de Git por cada edición
+
+- **Fecha de alta:** 2026-11-13
+- **Estado:** Vigente
+- **Origen:** Instrucción directa del usuario: «nueva regla: commit entre edicion».
+- **Contenido:** Toda edición del proyecto (código, pruebas, documentación o
+  configuración) debe confirmarse en un commit de Git propio antes de comenzar la
+  siguiente edición. Queda prohibido acumular cambios independientes en un mismo commit o
+  pasar a otra tarea dejando trabajo sin confirmar. El mensaje del commit debe estar en
+  español, describir el cambio con un prefijo de tipo (`feat:`, `fix:`, `docs:`, `test:`,
+  `chore:`) y ser autoexplicativo. Antes de confirmar se verifica que el índice no incluya
+  secretos, entornos virtuales, cachés ni bases de datos locales.
+- **Motivo:** Mantener un historial granular que permita auditar, revisar y revertir cada
+  cambio de forma aislada, y evitar la pérdida de trabajo entre sesiones.
+
 ---
 
 ## Plantilla para nuevas órdenes
