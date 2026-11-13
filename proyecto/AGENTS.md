@@ -10,8 +10,9 @@ Este archivo es el punto de entrada para cualquier agente que trabaje dentro de
 
 ## Reglas permanentes del proyecto
 
-- El alcance es exclusivamente **backend**. No generar vistas, HTML, CSS, JavaScript de
-  interfaz ni componentes gráficos.
+- El alcance incluye **backend** (API Flask en `aplicacion/`) y **frontend** (aplicación
+  estática en `frontend/`, ver OP-006). El frontend sólo consume endpoints documentados en
+  `docs/CONTRATO_API.md` y sigue `docs/GUIA_INTERFAZ.md`; no agrega ni simula datos.
 - Todo endpoint nuevo o modificado debe documentarse en `docs/CONTRATO_API.md` con ruta,
   verbo HTTP, roles autorizados, cuerpo de petición y respuesta esperada.
 - Usar Programación Orientada a Objetos y nombres descriptivos en español; prohibidas las

@@ -41,7 +41,7 @@ agregarse al final con un identificador incremental, su fecha y su alcance.
 ## OP-003 — Cumplimiento obligatorio de `proyecto/liniamientos.md`
 
 - **Fecha de alta:** 2026-11-12
-- **Estado:** Vigente
+- **Estado:** Vigente (reemplazada parcialmente por OP-006: se habilita el frontend)
 - **Origen:** Instrucción directa del usuario: iniciar el proyecto con los lineamientos
   especificados en `proyecto/liniamientos.md`.
 - **Contenido:** Todo desarrollo debe respetar la especificación de arquitectura backend
@@ -80,6 +80,21 @@ agregarse al final con un identificador incremental, su fecha y su alcance.
   secretos, entornos virtuales, cachés ni bases de datos locales.
 - **Motivo:** Mantener un historial granular que permita auditar, revisar y revertir cada
   cambio de forma aislada, y evitar la pérdida de trabajo entre sesiones.
+
+## OP-006 — Incorporación del frontend web
+
+- **Fecha de alta:** 2026-11-13
+- **Estado:** Vigente. Reemplaza la restricción de alcance exclusivamente backend de OP-003.
+- **Origen:** Instrucción directa del usuario: «crea la parte frontend. hazlo rápidamente».
+- **Contenido:** Se habilita e incorpora el frontend en `proyecto/frontend/` como aplicación
+  web estática (HTML, CSS y JavaScript sin dependencias externas ni paso de compilación) que
+  consume la API documentada en `docs/CONTRATO_API.md`. Toda pantalla debe trazarse a
+  endpoints existentes y respetar las reglas de `docs/GUIA_INTERFAZ.md` (roles, formato de
+  fechas, permisos, accesibilidad y manejo del token). El backend mantiene su arquitectura en
+  capas y no se modifican sus endpoints por esta orden. El token se guarda en
+  `sessionStorage`; ante `401` se descarta la sesión y se vuelve al inicio de sesión.
+- **Motivo:** Permitir el uso real del sistema desde el navegador sin alterar el contrato de
+  API ni la arquitectura del backend.
 
 ---
 
