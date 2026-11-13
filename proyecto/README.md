@@ -52,6 +52,18 @@ py -m venv .venv
 .\.venv\Scripts\python.exe run.py
 ```
 
+Para iniciar backend y frontend con un solo comando y abrir el navegador:
+
+```powershell
+.\iniciar-aplicacion.ps1                # inicia ambos servidores y abre http://localhost:5173
+.\iniciar-aplicacion.ps1 -SinNavegador  # inicia sin abrir el navegador
+.\iniciar-aplicacion.bat                # atajo equivalente para Windows
+```
+
+El script crea el entorno virtual si falta, inicializa la base de datos cuando todavía no
+existe, reutiliza los servidores que ya estén escuchando en los puertos 5000 y 5173, y
+detiene los procesos que inició al presionar `Ctrl+C`.
+
 Los pasos 1 y 2 se pueden automatizar con el script de configuración del entorno, que crea
 `.venv` sólo si no existe e instala `requirements.txt` cuando cambió:
 
