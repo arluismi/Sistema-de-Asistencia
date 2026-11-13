@@ -31,6 +31,9 @@ Este archivo es el punto de entrada para cualquier agente que trabaje dentro de
 ## Comandos de referencia
 
 ```powershell
+# Iniciar backend y frontend con el script del proyecto (desde proyecto/)
+.\scripts\iniciar-aplicacion.ps1
+
 # Crear entorno e instalar dependencias
 py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt

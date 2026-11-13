@@ -56,9 +56,9 @@ py -m venv .venv
 Para iniciar backend y frontend con un solo comando y abrir el navegador:
 
 ```powershell
-.\iniciar-aplicacion.ps1                # inicia ambos servidores y abre http://localhost:5173
-.\iniciar-aplicacion.ps1 -SinNavegador  # inicia sin abrir el navegador
-.\iniciar-aplicacion.bat                # atajo equivalente para Windows
+.\scripts\iniciar-aplicacion.ps1                # inicia ambos servidores y abre http://localhost:5173
+.\scripts\iniciar-aplicacion.ps1 -SinNavegador  # inicia sin abrir el navegador
+.\scripts\iniciar-aplicacion.bat                # atajo equivalente para Windows
 ```
 
 El script crea el entorno virtual si falta, inicializa la base de datos cuando todavía no
@@ -76,9 +76,9 @@ Los pasos 1 y 2 se pueden automatizar con el script de configuración del entorn
 `.venv` sólo si no existe e instala `requirements.txt` cuando cambió:
 
 ```powershell
-.\configurar-entorno.ps1                      # crea el entorno e instala dependencias
-.\configurar-entorno.ps1 -ForzarInstalacion   # reinstala aunque no haya cambios
-.\configurar-entorno.bat                      # atajo equivalente para Windows
+.\scripts\configurar-entorno.ps1                      # crea el entorno e instala dependencias
+.\scripts\configurar-entorno.ps1 -ForzarInstalacion   # reinstala aunque no haya cambios
+.\scripts\configurar-entorno.bat                      # atajo equivalente para Windows
 ```
 
 También se pueden ejecutar los comandos con la CLI de Flask:
@@ -181,6 +181,7 @@ proyecto/
 │   └── comandos/         # Comandos de inicialización y datos demo
 ├── docs/                 # Lineamientos, contrato de API, arquitectura y modelo de datos
 ├── ia/                   # Órdenes persistentes para la IA
+├── scripts/              # Scripts de configuración del entorno y de inicio
 ├── pruebas/              # Suite pytest
 ├── configuracion.py
 ├── run.py

@@ -15,10 +15,10 @@
     Reinstala las dependencias aunque `requirements.txt` no haya cambiado.
 
 .EXAMPLE
-    .\configurar-entorno.ps1
+    .\scripts\configurar-entorno.ps1
 
 .EXAMPLE
-    .\configurar-entorno.ps1 -ForzarInstalacion
+    .\scripts\configurar-entorno.ps1 -ForzarInstalacion
 #>
 [CmdletBinding()]
 param(
@@ -29,7 +29,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$raizProyecto = Split-Path -Parent $MyInvocation.MyCommand.Path
+# El script vive en `scripts/`; la raíz del proyecto es la carpeta superior.
+$carpetaScripts = Split-Path -Parent $MyInvocation.MyCommand.Path
+$raizProyecto = Split-Path -Parent $carpetaScripts
 Set-Location -LiteralPath $raizProyecto
 
 $rutaEntorno = Join-Path $raizProyecto '.venv'

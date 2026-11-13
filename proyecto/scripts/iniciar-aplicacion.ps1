@@ -32,10 +32,10 @@
     Cierra la consola al terminar sin esperar a que se presione Enter.
 
 .EXAMPLE
-    .\iniciar-aplicacion.ps1
+    .\scripts\iniciar-aplicacion.ps1
 
 .EXAMPLE
-    .\iniciar-aplicacion.ps1 -SinNavegador
+    .\scripts\iniciar-aplicacion.ps1 -SinNavegador
 #>
 [CmdletBinding()]
 param(
@@ -48,7 +48,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$raizProyecto = Split-Path -Parent $MyInvocation.MyCommand.Path
+# El script vive en `scripts/`; la raíz del proyecto es la carpeta superior.
+$carpetaScripts = Split-Path -Parent $MyInvocation.MyCommand.Path
+$raizProyecto = Split-Path -Parent $carpetaScripts
 Set-Location -LiteralPath $raizProyecto
 
 $puertoBackend = 5000
@@ -56,7 +58,7 @@ $puertoFrontend = 5173
 $urlFrontend = "http://localhost:$puertoFrontend"
 
 $rutaPython = Join-Path $raizProyecto '.venv\Scripts\python.exe'
-$rutaScriptEntorno = Join-Path $raizProyecto 'configurar-entorno.ps1'
+$rutaScriptEntorno = Join-Path $carpetaScripts 'configurar-entorno.ps1'
 
 $script:procesosIniciados = @()
 
