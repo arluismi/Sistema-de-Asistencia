@@ -54,7 +54,7 @@ agregarse al final con un identificador incremental, su fecha y su alcance.
 ## OP-004 — Guía de interfaz complementaria al contrato de API
 
 - **Fecha de alta:** 2026-11-12
-- **Estado:** Vigente
+- **Estado:** Vigente (la restricción de no generar vistas queda reemplazada por OP-006)
 - **Origen:** Instrucción directa del usuario: dejar un archivo complementario al contrato
   de API para guiar el diseño de la UI/HTML.
 - **Contenido:** Debe existir `proyecto/docs/GUIA_INTERFAZ.md` como especificación de

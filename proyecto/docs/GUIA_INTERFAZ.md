@@ -1,9 +1,9 @@
 # Guía de diseño de interfaz (HTML) — Complemento del Contrato de API
 
-> Este documento es una especificación para el futuro frontend. **No contiene código de
-> interfaz**: no hay HTML, CSS ni JavaScript ejecutable. Su función es traducir
-> [`CONTRATO_API.md`](CONTRATO_API.md) a pantallas, componentes, flujos y criterios de
-> usabilidad verificables.
+> Este documento es la especificación de la interfaz implementada en `proyecto/frontend/`.
+> **No contiene código de interfaz**: no hay HTML, CSS ni JavaScript ejecutable. Su función
+> es traducir [`CONTRATO_API.md`](CONTRATO_API.md) a pantallas, componentes, flujos y
+> criterios de usabilidad verificables.
 
 ## 1. Propósito y alcance
 
@@ -30,10 +30,10 @@ dato en el cliente.
 
 ### 1.3 Relación con el alcance del trabajo práctico
 
-`liniamientos.md` restringe esta fase al backend. Esta guía **no habilita** la generación de
-vistas, hojas de estilo, scripts de interfaz ni componentes gráficos dentro del repositorio.
-Su existencia es documental: prepara la futura incorporación del frontend sin alterar el
-alcance actual.
+Desde la orden OP-006, el frontend forma parte del alcance y se implementa como aplicación
+estática en `proyecto/frontend/`. Esta guía es su especificación de diseño: toda pantalla
+debe trazarse a endpoints documentados y el backend sigue siendo la autoridad de permisos,
+validaciones y cálculos.
 
 ### 1.4 Convenciones de esta guía
 

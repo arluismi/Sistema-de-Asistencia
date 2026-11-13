@@ -42,6 +42,9 @@ py -m venv .venv
 # Ejecutar el servidor de desarrollo
 .\.venv\Scripts\python.exe run.py
 
+# Servir el frontend estático (en otra terminal)
+.\.venv\Scripts\python.exe -m http.server 5173 --directory frontend
+
 # Ejecutar las pruebas
 .\.venv\Scripts\python.exe -m pytest
 ```

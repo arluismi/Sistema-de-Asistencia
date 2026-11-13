@@ -1,21 +1,23 @@
-# Sistema de Gestión de Asistencia Institucional — Backend
+# Sistema de Gestión de Asistencia Institucional — Backend y frontend
 
-Backend del trabajo práctico final, desarrollado en **Python 3.11+** con **Flask**.
-Implementa los dos módulos exigidos por `liniamientos.md`:
+Sistema completo del trabajo práctico final: **backend** en **Python 3.11+** con **Flask** y
+**frontend** web estático en HTML, CSS y JavaScript sin dependencias externas. Implementa los
+dos módulos exigidos por `liniamientos.md`:
 
 1. Control de asistencia de estudiantes.
 2. Asistencia y puntualidad del personal docente.
 
-El alcance es exclusivamente backend: no se generan vistas, HTML, CSS ni componentes de
-interfaz. El contrato de API para el futuro frontend está documentado en
-[`docs/CONTRATO_API.md`](docs/CONTRATO_API.md).
+El contrato de API es la fuente de verdad y está documentado en
+[`docs/CONTRATO_API.md`](docs/CONTRATO_API.md). La interfaz sigue
+[`docs/GUIA_INTERFAZ.md`](docs/GUIA_INTERFAZ.md) y sólo consume endpoints existentes.
 
 ## Documentación
 
 | Documento | Contenido |
 |---|---|
 | [`docs/CONTRATO_API.md`](docs/CONTRATO_API.md) | Endpoints, roles, cuerpos y respuestas |
-| [`docs/GUIA_INTERFAZ.md`](docs/GUIA_INTERFAZ.md) | Pantallas, flujos y criterios para el futuro frontend |
+| [`docs/GUIA_INTERFAZ.md`](docs/GUIA_INTERFAZ.md) | Pantallas, flujos y criterios de la interfaz |
+| [`frontend/README.md`](frontend/README.md) | Ejecución, estructura y alcance del frontend |
 | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Capas, patrones y decisiones de diseño |
 | [`docs/MODELO_DE_DATOS.md`](docs/MODELO_DE_DATOS.md) | Esquema normalizado e integridad referencial |
 | [`docs/DEPENDENCIAS_EXTERNAS.md`](docs/DEPENDENCIAS_EXTERNAS.md) | Uso documentado de librerías externas |
@@ -55,6 +57,23 @@ También se pueden ejecutar los comandos con la CLI de Flask:
 ```powershell
 .\.venv\Scripts\python.exe -m flask --app run.py inicializar-base-de-datos
 ```
+
+## Frontend
+
+La interfaz está en `frontend/` y se sirve como sitio estático. Con el backend en ejecución:
+
+```powershell
+# Segunda terminal, desde proyecto/
+.\.venv\Scripts\python.exe -m http.server 5173 --directory frontend
+```
+
+Abrir <http://localhost:5173> e ingresar con las credenciales de demostración. El frontend
+detecta la URL de la API en `http://localhost:5000/api/v1`.
+
+- El token se guarda en `sessionStorage` y se descarta al cerrar sesión o ante cualquier `401`.
+- Si se define `CORS_ORIGENES_PERMITIDOS` en `.env`, incluir `http://localhost:5173`.
+- No requiere compilación, `npm` ni conexión a internet.
+- Las pantallas y la navegación por rol están implementadas según `docs/GUIA_INTERFAZ.md`.
 
 ### Variables de entorno
 
@@ -113,6 +132,11 @@ referencial de la base de datos.
 
 ```
 proyecto/
+├── frontend/             # SPA estática: HTML, CSS y JavaScript sin dependencias
+│   ├── index.html
+│   └── assets/
+│       ├── css/estilos.css
+│       └── js/           # Cliente API, componentes, páginas y enrutador
 ├── aplicacion/
 │   ├── controladores/    # Endpoints HTTP y validación de entrada
 │   ├── servicios/        # Lógica de negocio y transacciones
