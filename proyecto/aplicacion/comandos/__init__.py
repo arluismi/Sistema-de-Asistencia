@@ -11,6 +11,7 @@ from flask import Flask
 
 from ..extenciones import base_de_datos
 from ..servicios.datos_demostracion import sembrar_datos_demostracion
+from ..servicios.datos_prueba import generar_datos_prueba
 from ..servicios.inicializacion import inicializar_datos_base
 
 
@@ -31,9 +32,18 @@ def comando_sembrar_datos_demostracion() -> None:
     print(json.dumps(resultado, ensure_ascii=False, indent=2))
 
 
+def comando_generar_datos_prueba() -> None:
+    """Carga varios cursos, asistencias y firmas para probar con volumen."""
+
+    base_de_datos.create_all()
+    resultado = generar_datos_prueba()
+    print(json.dumps(resultado, ensure_ascii=False, indent=2))
+
+
 COMANDOS_DISPONIBLES = {
     "inicializar-base-de-datos": comando_inicializar_base_de_datos,
     "sembrar-datos-demostracion": comando_sembrar_datos_demostracion,
+    "generar-datos-prueba": comando_generar_datos_prueba,
 }
 
 
@@ -50,6 +60,7 @@ def registrar_comandos(aplicacion: Flask) -> None:
     aplicacion.cli.command("sembrar-datos-demostracion")(
         comando_sembrar_datos_demostracion
     )
+    aplicacion.cli.command("generar-datos-prueba")(comando_generar_datos_prueba)
 
 
 def ejecutar_comando_directo(aplicacion: Flask, argumentos: list[str]) -> int:
