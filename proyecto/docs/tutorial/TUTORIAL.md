@@ -315,7 +315,7 @@ Abajo se listan las licencias ya registradas, con filtros por docente y fechas.
 Muestra cuántas horas debía trabajar cada docente, cuántas trabajó realmente y cuál es la
 diferencia.
 
-![Balance de horas cátedra](imagenes/20-balance.jpg)
+![Balance de horas cátedra](imagenes/20-balance-horas.jpg)
 
 Filtros:
 
