@@ -5,8 +5,17 @@
 .DESCRIPTION
     Levanta el servidor de desarrollo de Flask (puerto 5000) y el servidor
     estático del frontend (puerto 5173), espera a que ambos respondan y abre
-    `http://localhost:5173` en el navegador predeterminado. Al presionar
-    Ctrl+C se detienen los dos servidores iniciados por este script.
+    `http://localhost:5173` en el navegador predeterminado.
+
+    También muestra la dirección de la red local (por ejemplo
+    `http://192.168.0.10:5173`) para abrir la aplicación desde otros
+    dispositivos conectados a la misma red. El frontend escucha en todas las
+    interfaces y toma la dirección del backend del mismo host desde el que se
+    abre la página.
+
+    Al presionar una tecla (o Ctrl+C) se detienen los servidores iniciados por
+    este script y la consola queda abierta hasta presionar Enter, para poder
+    leer los mensajes.
 
     Si el entorno virtual no existe, se crea antes de continuar. Si la base de
     datos SQLite todavía no existe, se inicializa y se cargan los datos de
@@ -19,6 +28,9 @@
     Sólo crea las tablas cuando la base de datos no existe; no carga los datos
     de demostración.
 
+.PARAMETER SinPausa
+    Cierra la consola al terminar sin esperar a que se presione Enter.
+
 .EXAMPLE
     .\iniciar-aplicacion.ps1
 
@@ -29,7 +41,9 @@
 param(
     [switch]$SinNavegador,
 
-    [switch]$SinDatosDemostracion
+    [switch]$SinDatosDemostracion,
+
+    [switch]$SinPausa
 )
 
 $ErrorActionPreference = 'Stop'
@@ -67,6 +81,26 @@ function Test-PuertoOcupado {
     }
     finally {
         $cliente.Close()
+    }
+}
+
+function Test-PuertoAccesibleEnLan {
+    param([int]$Puerto)
+
+    # `Get-NetTCPConnection` lista los sockets en escucha y su dirección local;
+    # sólo `0.0.0.0` (o `::`) acepta conexiones desde otros equipos.
+    $escuchas = Get-NetTCPConnection -LocalPort $Puerto -State Listen -ErrorAction SilentlyContinue
+    return [bool]($escuchas | Where-Object { $_.LocalAddress -eq '0.0.0.0' -or $_.LocalAddress -eq '::' })
+}
+
+function Test-TeclaDisponible {
+    try {
+        # `KeyAvailable` no consume la tecla; sólo informa si hay una esperando.
+        return [Console]::KeyAvailable
+    }
+    catch {
+        # Sin consola interactiva (entrada redirigida) no hay teclas que leer.
+        return $false
     }
 }
 
@@ -113,6 +147,41 @@ function Get-RutaBaseDeDatosSqlite {
     return (Join-Path $raizProyecto $ruta)
 }
 
+function Get-DireccionLan {
+    # La interfaz con la ruta predeterminada es la que usa el equipo para salir
+    # a la red; es la dirección que otros dispositivos de la LAN pueden usar.
+    $rutaPredeterminada = Get-NetRoute -DestinationPrefix '0.0.0.0/0' -ErrorAction SilentlyContinue |
+        Sort-Object RouteMetric, InterfaceMetric |
+        Select-Object -First 1
+
+    if ($rutaPredeterminada) {
+        $direccion = Get-NetIPAddress -AddressFamily IPv4 -InterfaceIndex $rutaPredeterminada.InterfaceIndex -ErrorAction SilentlyContinue |
+            Where-Object { $_.IPAddress -notlike '169.254.*' } |
+            Select-Object -First 1
+        if ($direccion) {
+            return $direccion.IPAddress
+        }
+    }
+
+    # Respaldo: el sistema informa qué dirección local usaría para salir a
+    # Internet. Al ser UDP no se envía ningún paquete.
+    $socket = [System.Net.Sockets.Socket]::new(
+        [System.Net.Sockets.AddressFamily]::InterNetwork,
+        [System.Net.Sockets.SocketType]::Dgram,
+        [System.Net.Sockets.ProtocolType]::Udp
+    )
+    try {
+        $socket.Connect('8.8.8.8', 53)
+        return $socket.LocalEndPoint.Address.ToString()
+    }
+    catch {
+        return $null
+    }
+    finally {
+        $socket.Close()
+    }
+}
+
 function Start-Servidor {
     param(
         [string]$Descripcion,
@@ -138,35 +207,36 @@ function Stop-ProcesosIniciados {
     }
 }
 
-if (-not (Test-Path -LiteralPath $rutaPython)) {
-    if (-not (Test-Path -LiteralPath $rutaScriptEntorno)) {
-        throw "No existe el entorno virtual ni '$rutaScriptEntorno'. Creá el entorno manualmente."
-    }
-    Escribir-Paso 'No existe el entorno virtual; se ejecuta configurar-entorno.ps1.'
-    & $rutaScriptEntorno
-    if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $rutaPython)) {
-        throw 'No se pudo preparar el entorno virtual.'
-    }
-}
-
-$rutaBaseDatos = Get-RutaBaseDeDatosSqlite
-if ($rutaBaseDatos -and -not (Test-Path -LiteralPath $rutaBaseDatos)) {
-    Escribir-Paso 'La base de datos no existe; se crean las tablas.'
-    & $rutaPython run.py inicializar-base-de-datos
-    if ($LASTEXITCODE -ne 0) {
-        throw "Falló la inicialización de la base de datos (código de salida $LASTEXITCODE)."
-    }
-
-    if (-not $SinDatosDemostracion) {
-        Escribir-Paso 'Se cargan los datos de demostración.'
-        & $rutaPython run.py sembrar-datos-demostracion
-        if ($LASTEXITCODE -ne 0) {
-            throw "Falló la carga de datos de demostración (código de salida $LASTEXITCODE)."
+$codigoSalida = 0
+try {
+    if (-not (Test-Path -LiteralPath $rutaPython)) {
+        if (-not (Test-Path -LiteralPath $rutaScriptEntorno)) {
+            throw "No existe el entorno virtual ni '$rutaScriptEntorno'. Creá el entorno manualmente."
+        }
+        Escribir-Paso 'No existe el entorno virtual; se ejecuta configurar-entorno.ps1.'
+        & $rutaScriptEntorno
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $rutaPython)) {
+            throw 'No se pudo preparar el entorno virtual.'
         }
     }
-}
 
-try {
+    $rutaBaseDatos = Get-RutaBaseDeDatosSqlite
+    if ($rutaBaseDatos -and -not (Test-Path -LiteralPath $rutaBaseDatos)) {
+        Escribir-Paso 'La base de datos no existe; se crean las tablas.'
+        & $rutaPython run.py inicializar-base-de-datos
+        if ($LASTEXITCODE -ne 0) {
+            throw "Falló la inicialización de la base de datos (código de salida $LASTEXITCODE)."
+        }
+
+        if (-not $SinDatosDemostracion) {
+            Escribir-Paso 'Se cargan los datos de demostración.'
+            & $rutaPython run.py sembrar-datos-demostracion
+            if ($LASTEXITCODE -ne 0) {
+                throw "Falló la carga de datos de demostración (código de salida $LASTEXITCODE)."
+            }
+        }
+    }
+
     Escribir-Paso "Iniciando backend en el puerto $puertoBackend."
     if (Test-PuertoOcupado -Puerto $puertoBackend) {
         Write-Host "  El puerto $puertoBackend ya está en uso; se reutiliza el servicio existente." -ForegroundColor Yellow
@@ -182,18 +252,36 @@ try {
         $procesoFrontend = $null
     }
     else {
+        # `--bind 0.0.0.0` publica el sitio en todas las interfaces, para que
+        # también responda a otros dispositivos de la red local.
         $procesoFrontend = Start-Servidor -Descripcion 'Frontend' -Argumentos @(
-            '-m', 'http.server', $puertoFrontend, '--bind', '127.0.0.1', '--directory', 'frontend'
+            '-m', 'http.server', $puertoFrontend, '--bind', '0.0.0.0', '--directory', 'frontend'
         )
     }
 
     Wait-PuertoDisponible -Puerto $puertoBackend -Descripcion 'backend' -Proceso $procesoBackend
     Wait-PuertoDisponible -Puerto $puertoFrontend -Descripcion 'frontend' -Proceso $procesoFrontend
 
+    $direccionLan = Get-DireccionLan
+
     Escribir-Paso 'Aplicación disponible.'
-    Write-Host "  Frontend: $urlFrontend"
-    Write-Host "  API:      http://localhost:$puertoBackend/api/v1"
+    Write-Host "  Frontend local:           $urlFrontend"
+    Write-Host "  API local:                http://localhost:$puertoBackend/api/v1"
+    if ($direccionLan) {
+        Write-Host "  Frontend en la red local: http://${direccionLan}:$puertoFrontend" -ForegroundColor Green
+        Write-Host "  API en la red local:      http://${direccionLan}:$puertoBackend/api/v1" -ForegroundColor Green
+    }
+    else {
+        Write-Host '  No se pudo determinar la dirección de la red local.' -ForegroundColor Yellow
+    }
     Write-Host '  Credenciales de demostración: ver README.md'
+
+    if ($direccionLan) {
+        if (-not (Test-PuertoAccesibleEnLan -Puerto $puertoFrontend)) {
+            Write-Host '  El frontend sólo escucha en localhost; cerralo y volvé a ejecutar este script para acceder por la red local.' -ForegroundColor Yellow
+        }
+        Write-Host '  Si otro dispositivo no conecta, permití Python en el Firewall de Windows (redes privadas).' -ForegroundColor DarkGray
+    }
 
     if (-not $SinNavegador) {
         # `Start-Process` sobre una URL abre el navegador predeterminado.
@@ -208,17 +296,41 @@ try {
     }
 
     Write-Host ''
-    Write-Host 'Presioná Ctrl+C para detener los servidores iniciados por este script.' -ForegroundColor Yellow
+    Write-Host 'Presioná una tecla en esta ventana para detener los servidores (o Ctrl+C).' -ForegroundColor Yellow
 
     while ($true) {
-        Start-Sleep -Seconds 1
+        Start-Sleep -Milliseconds 250
         foreach ($proceso in $script:procesosIniciados) {
             if ($proceso.HasExited) {
                 throw "El proceso con PID $($proceso.Id) terminó inesperadamente."
             }
         }
+        if (Test-TeclaDisponible) {
+            # Se consume la tecla para que no la tome el Enter final.
+            [void][Console]::ReadKey($true)
+            break
+        }
     }
 }
-finally {
-    Stop-ProcesosIniciados
+catch {
+    $codigoSalida = 1
+    Write-Host ''
+    Write-Host "ERROR: $($_.Exception.Message)" -ForegroundColor Red
 }
+finally {
+    $habiaProcesos = $script:procesosIniciados.Count -gt 0
+    Stop-ProcesosIniciados
+    if ($habiaProcesos) {
+        Write-Host ''
+        Write-Host 'Servidores detenidos.' -ForegroundColor DarkGray
+    }
+}
+
+if (-not $SinPausa) {
+    Write-Host ''
+    # La ventana queda abierta para poder leer la dirección de la red local,
+    # los registros de los servidores o un mensaje de error.
+    Read-Host 'Presioná Enter para cerrar esta ventana' | Out-Null
+}
+
+exit $codigoSalida
