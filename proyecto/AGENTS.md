@@ -22,6 +22,10 @@ Este archivo es el punto de entrada para cualquier agente que trabaje dentro de
   openpyxl) explicando qué hace cada llamada relevante.
 - Registrar toda nueva orden persistente en `proyecto/ia/ORDENES_PERSISTENTES.md`, sin
   borrar entradas previas.
+- Confirmar **cada edición** en un commit de Git propio antes de iniciar la siguiente
+  (ver OP-005): un cambio independiente por commit, mensaje en español con prefijo de tipo
+  (`feat:`, `fix:`, `docs:`, `test:`, `chore:`) y sin secretos, `.venv`, cachés ni bases de
+  datos locales en el índice.
 
 ## Comandos de referencia
 
