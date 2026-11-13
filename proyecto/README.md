@@ -22,6 +22,7 @@ El contrato de API es la fuente de verdad y está documentado en
 | [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md) | Capas, patrones y decisiones de diseño |
 | [`docs/MODELO_DE_DATOS.md`](docs/MODELO_DE_DATOS.md) | Esquema normalizado e integridad referencial |
 | [`docs/DEPENDENCIAS_EXTERNAS.md`](docs/DEPENDENCIAS_EXTERNAS.md) | Uso documentado de librerías externas |
+| [`docs/tutorial/TUTORIAL.md`](docs/tutorial/TUTORIAL.md) | Tutorial de uso de la aplicación con imágenes del frontend |
 | [`ia/ORDENES_PERSISTENTES.md`](ia/ORDENES_PERSISTENTES.md) | Registro de órdenes permanentes para la IA |
 | [`AGENTS.md`](AGENTS.md) | Guía de trabajo para agentes de IA |
 
