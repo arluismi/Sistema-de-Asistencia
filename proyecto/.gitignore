@@ -1,0 +1,22 @@
+# Entorno virtual de Python.
+.venv/
+venv/
+
+# Archivos compilados y cachés.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Configuración local y secretos.
+.env
+
+# Bases de datos locales generadas en tiempo de ejecución.
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos exportados manualmente.
+reportes_generados/
