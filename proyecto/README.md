@@ -61,8 +61,15 @@ Para iniciar backend y frontend con un solo comando y abrir el navegador:
 ```
 
 El script crea el entorno virtual si falta, inicializa la base de datos cuando todavía no
-existe, reutiliza los servidores que ya estén escuchando en los puertos 5000 y 5173, y
-detiene los procesos que inició al presionar `Ctrl+C`.
+existe, reutiliza los servidores que ya estén escuchando en los puertos 5000 y 5173 y, al
+quedar listo, muestra las direcciones locales y la de la red local (por ejemplo
+`http://192.168.0.10:5173`). Con esa dirección se puede abrir la aplicación desde otros
+dispositivos conectados a la misma red; si el navegador del otro equipo no conecta, hay que
+permitir Python en el Firewall de Windows para redes privadas.
+
+Los servidores se detienen al presionar una tecla en la consola (o `Ctrl+C`) y la ventana
+permanece abierta hasta presionar `Enter`, para poder leer los mensajes; eso último se puede
+omitir con `-SinPausa`.
 
 Los pasos 1 y 2 se pueden automatizar con el script de configuración del entorno, que crea
 `.venv` sólo si no existe e instala `requirements.txt` cuando cambió:
