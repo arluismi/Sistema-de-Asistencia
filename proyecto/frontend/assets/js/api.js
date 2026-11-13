@@ -7,8 +7,12 @@ const API = (function () {
   "use strict";
 
   // Si la aplicación se sirve desde el mismo puerto del backend (5000) se usa
-  // una ruta relativa; en caso contrario se apunta al servidor de desarrollo.
-  const ORIGEN_API = window.location.port === "5000" ? "" : "http://localhost:5000";
+  // una ruta relativa; en caso contrario se apunta al backend en el mismo host
+  // desde el que se abrió la página (localhost o una IP de la red local), para
+  // que también funcione desde otros dispositivos.
+  const NOMBRE_HOST = window.location.hostname || "localhost";
+  const ORIGEN_API =
+    window.location.port === "5000" ? "" : "http://" + NOMBRE_HOST + ":5000";
   const URL_BASE = ORIGEN_API + "/api/v1";
 
   const CLAVES = {
