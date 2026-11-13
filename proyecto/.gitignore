@@ -11,6 +11,8 @@ htmlcov/
 
 # Configuración local y secretos.
 .env
+.env.*
+!.env.example
 
 # Bases de datos locales generadas en tiempo de ejecución.
 instance/
@@ -20,3 +22,16 @@ instance/
 
 # Archivos exportados manualmente.
 reportes_generados/
+
+# Documentos generados a partir de Markdown (se regeneran desde TUTORIAL.md).
+docs/tutorial/TUTORIAL.pdf
+
+# Archivos del sistema operativo y editores.
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.log
+*.tmp
