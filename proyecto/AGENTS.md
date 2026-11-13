@@ -42,6 +42,9 @@ py -m venv .venv
 .\.venv\Scripts\python.exe run.py inicializar-base-de-datos
 .\.venv\Scripts\python.exe run.py sembrar-datos-demostracion
 
+# Cargar datos de prueba con volumen (idempotente)
+.\.venv\Scripts\python.exe run.py generar-datos-prueba
+
 # Ejecutar el servidor de desarrollo
 .\.venv\Scripts\python.exe run.py
 

@@ -87,6 +87,26 @@ También se pueden ejecutar los comandos con la CLI de Flask:
 .\.venv\Scripts\python.exe -m flask --app run.py inicializar-base-de-datos
 ```
 
+### Datos de prueba con volumen
+
+Para probar listados, tableros, alertas y reportes con una cantidad representativa de
+registros:
+
+```powershell
+.\scripts\cargar-datos-prueba.ps1        # crea el volumen y espera Enter al terminar
+.\scripts\cargar-datos-prueba.bat        # atajo equivalente para Windows
+.\.venv\Scripts\python.exe run.py generar-datos-prueba
+```
+
+El comando crea 4 cursos, 3 docentes, 5 materias, 32 estudiantes, los bloques horarios de la
+semana, 15 jornadas de asistencia estudiantil y las firmas docentes con sus tardanzas y
+salidas anticipadas. Como consecuencia también se generan alertas de inasistencias
+consecutivas y de regularidad en riesgo. Es idempotente: si los datos ya están cargados, no
+duplica nada.
+
+Credenciales de prueba: `docente.prueba.1` / `Docente123!` y `alumno.prueba.1` /
+`Alumno123!`.
+
 ## Frontend
 
 La interfaz está en `frontend/` y se sirve como sitio estático. Con el backend en ejecución:
